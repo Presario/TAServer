@@ -10,11 +10,6 @@ namespace RabbitHome
 		byte[] buffer;
 		NetworkStream _networkstream;
 
-		enum XCommand 
-		{
-			Nop,Shutdown,Recv_Text,Recv_File,Send_Text,Send_File
-		}
-
 		public DoJobs ()
 		{
 			buffer = new byte[bufLen];
