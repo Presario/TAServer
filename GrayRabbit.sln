@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RabbitHome", "RabbitHome\RabbitHome.csproj", "{9F21DECE-BB69-4AA3-A1B7-CD12DB8CF03B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rabbit", "Rabbit\Rabbit.csproj", "{C5E96C57-D91F-4AC1-ADAB-D2224AE38332}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RabbitX", "RabbitX\RabbitX.csproj", "{B38387FA-DBD5-4BF8-A4CA-5488F3F1B629}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9F21DECE-BB69-4AA3-A1B7-CD12DB8CF03B}.Debug|x86.ActiveCfg = Debug|x86
+		{9F21DECE-BB69-4AA3-A1B7-CD12DB8CF03B}.Debug|x86.Build.0 = Debug|x86
+		{9F21DECE-BB69-4AA3-A1B7-CD12DB8CF03B}.Release|x86.ActiveCfg = Release|x86
+		{9F21DECE-BB69-4AA3-A1B7-CD12DB8CF03B}.Release|x86.Build.0 = Release|x86
+		{B38387FA-DBD5-4BF8-A4CA-5488F3F1B629}.Debug|x86.ActiveCfg = Debug|x86
+		{B38387FA-DBD5-4BF8-A4CA-5488F3F1B629}.Debug|x86.Build.0 = Debug|x86
+		{B38387FA-DBD5-4BF8-A4CA-5488F3F1B629}.Release|x86.ActiveCfg = Release|x86
+		{B38387FA-DBD5-4BF8-A4CA-5488F3F1B629}.Release|x86.Build.0 = Release|x86
+		{C5E96C57-D91F-4AC1-ADAB-D2224AE38332}.Debug|x86.ActiveCfg = Debug|x86
+		{C5E96C57-D91F-4AC1-ADAB-D2224AE38332}.Debug|x86.Build.0 = Debug|x86
+		{C5E96C57-D91F-4AC1-ADAB-D2224AE38332}.Release|x86.ActiveCfg = Release|x86
+		{C5E96C57-D91F-4AC1-ADAB-D2224AE38332}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = RabbitHome\RabbitHome.csproj
+	EndGlobalSection
+EndGlobal
