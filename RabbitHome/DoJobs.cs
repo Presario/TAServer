@@ -1,75 +1,61 @@
 ﻿using System;
-using System.Net;
 using System.Net.Sockets;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
+using Rabbit;
 
 namespace RabbitHome
 {
 	public class DoJobs
 	{
-		int bufLen = 1024;
-		byte[] buffer;
-		NetworkStream _networkstream;
 
-		public DoJobs ()
-		{
-			buffer = new byte[bufLen];
-		}
+		NetworkStream _networkstream;
+		XClinet _clinet;
+		IFormatter _formatter;
+		XPackage _package;
 
 		public void ThreadCallBack(Object obj)
 		{
-			int readbytes=0,totalbytes=0;
-			TcpClient client = obj as TcpClient;
-			_networkstream = client.GetStream ();
+			_clinet = obj as XClinet;
+			_networkstream = _clinet.TcpClinet.GetStream();
+			_formatter = new BinaryFormatter();
 
 			bool running = true;
 
-			try {
+			try
+			{
 
-				while (running) {
-					if ((readbytes = _networkstream.Read (buffer, 0, buffer.Length)) > 0) {
+				while (running)
+				{
+					_package = (XPackage)_formatter.Deserialize(
+						_networkstream);
 
-						totalbytes += readbytes;
-						string text = GetString (buffer, readbytes);
-						if (text!="") {
-							Console.WriteLine (">> " + text);
-						}
-
-						byte[] write_buffer = System.Text.UnicodeEncoding.Unicode.GetBytes (
-							string.Format ("＊服务器接收到数据:{0:D8}字节", totalbytes));
-						_networkstream.Write (write_buffer, 0, write_buffer.Length);
-						_networkstream.Flush ();
+					if (_package.MagicId == 0)
+					{
+						running = false;
+						Toos.Msg_Warn("客户端{0:D5}[{1}]请求结束会话\n",
+									  _clinet.ThreadId, _clinet.TcpClinet.Client.RemoteEndPoint.ToString());
+						continue;
 					}
+
+					Toos.Msg_Message("获得数据{0}=>{1}:{2},{3},{4} ...\n",
+									_clinet.TcpClinet.Client.RemoteEndPoint.ToString(),
+									 Toos.GetLocalIP(), _package.From, _package.To, _package.Text);
 				}
 
-			}catch(System.IO.IOException ex){
-				Console.ForegroundColor = ConsoleColor.Magenta;
-				Console.WriteLine (">>> "+ex.Message+",MAYBE THE CLINET IS DOWN!");
-				Console.ForegroundColor = ConsoleColor.Gray;
 			}
-			catch (Exception ex) {
-				Console.ForegroundColor = ConsoleColor.Magenta;
-				Console.WriteLine (">>> "+ex.Message);
-				Console.ForegroundColor = ConsoleColor.Gray;
+			catch (Exception ex)
+			{
+				Toos.Msg_Alert("错误:{0}\n", ex.StackTrace);
 			}
-			finally{
-				_networkstream.Close ();
+			finally
+			{
+
+				Toos.Msg_Warn("线程{0:D5},远程{1} 结束\n",
+							  _clinet.ThreadId, _clinet.TcpClinet.Client.RemoteEndPoint.ToString());
+				_networkstream.Close();
 			}
 
-		}
-
-		String GetString(byte[] buffer, int readbytes)
-		{
-			string returnstring = "";
-
-			try {
-				System.Text.UnicodeEncoding UnicodeEn = new System.Text.UnicodeEncoding ();
-				returnstring = UnicodeEn.GetString (buffer, 0, readbytes);				
-			} catch (Exception ex) {
-				Console.ForegroundColor = ConsoleColor.Yellow;
-				Console.WriteLine (">>> "+ex.Message);
-				Console.ForegroundColor = ConsoleColor.Gray;
-			}
-			return returnstring;
 		}
 
 

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
+using Rabbit;
 
 namespace RabbitX
 {
@@ -9,36 +11,64 @@ namespace RabbitX
 	{
 		public static void Main (string[] args)
 		{
-			string sendstring = "";
 			string ipString ;
 			int port = 8888;
-			int buflen = 1024;
-			byte[] response_buffer = new byte[buflen];
+			XPackage _package;
+			IFormatter _formater = new BinaryFormatter();
+			NetworkStream _networkstream;
 
-			Console.Write ("Server IP:");
+			Random rand = new Random();
+
+			Toos.Msg_Message("请输远程服务器地址:");
+
 			ipString = Console.ReadLine ();
 			ipString = ipString == "" ? "127.0.0.1" : ipString;
 
 			TcpClient clinet = new TcpClient();
 			clinet.Connect (new IPEndPoint (IPAddress.Parse (ipString), port));
 
-			Console.WriteLine (">> Starting connect ..." + ipString + ":" + port.ToString());
+			_networkstream = clinet.GetStream();
 
-			NetworkStream _nstream = clinet.GetStream ();
-			while ((sendstring=Console.ReadLine())!="*") {
-				byte[] buffer = 
-					System.Text.UnicodeEncoding.Unicode.GetBytes (sendstring);
-				_nstream.Write (buffer, 0, buffer.Length);
+			Toos.Msg_Alert("正在连接{0}:{1} ...\n",ipString,port);
+			Toos.Msg_Message("程序运行中按任意键退出:D\n");
 
-				if (_nstream.DataAvailable) {
-					int len = _nstream.Read (response_buffer, 0, response_buffer.Length);
-					if (len > 0) {
-						Console.WriteLine(">> "+
-							System.Text.UnicodeEncoding.Unicode.GetString(response_buffer).Trim());
-					}
+			while (!Console.KeyAvailable)
+			{
+				_package = new XPackage()
+				{
+					From = "测试发送：" + rand.Next(),
+					To = "测试接收：" + rand.Next(),
+					Text = "测试数据：" + rand.Next(),
+					MagicId = 1
+				};
+				System.Threading.Thread.Sleep(500);
+
+				try
+				{
+					_formater.Serialize(_networkstream, _package);
+					Toos.Msg_Message("发送数据{0}=>{1}:{2},{3}.{4} ...\n",
+					                 Toos.GetLocalIP(),
+					                 ipString, _package.From, _package.To, _package.Text);
 				}
-
+				catch (Exception ex)
+				{
+					Toos.Msg_Alert("错误:{0}\n",ex.Message);
+				}
 			}
+
+			//发送魔术包！
+			_package = new XPackage()
+			{
+				From = "准备" + rand.Next(),
+				To = "结束：" + rand.Next(),
+				Text = "通讯：" + rand.Next(),
+				MagicId = 0
+			};
+
+			_formater.Serialize(_networkstream, _package);
+
+			_networkstream.Close();
+			clinet.Close();
 		}
 	}
 }

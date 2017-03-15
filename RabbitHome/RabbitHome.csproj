@@ -38,5 +38,11 @@
     <Compile Include="TServer.cs" />
     <Compile Include="DoJobs.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Rabbit\Rabbit.csproj">
+      <Project>{7E9313E1-9BBE-46DD-823F-2E365CA92164}</Project>
+      <Name>Rabbit</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

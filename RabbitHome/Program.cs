@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Net;
-using System.Net.Sockets;
-using System.Text;
+using Rabbit;
 
 namespace RabbitHome
 {
@@ -9,9 +7,16 @@ namespace RabbitHome
 	{
 		public static void Main (string[] args)
 		{
-			Console.Write ("IP Bind:");
-			string ipaddress = Console.ReadLine ();
-			TServer server = new TServer (ipaddress,8888);
+			int _port = 8888;
+
+			Toos.Msg_Message("本服务器IP：{0}\n  请按回车确认或者输入指定需要绑定的IP地址：", Toos.GetLocalIP());
+			string _serverip = Console.ReadLine();
+			if (_serverip=="")
+			{
+				_serverip = Toos.GetLocalIP();
+			}
+
+			TServer server = new TServer (_serverip,_port);
 			server.Start ();
 
 		}
