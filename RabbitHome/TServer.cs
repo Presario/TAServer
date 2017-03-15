@@ -21,6 +21,7 @@ namespace RabbitHome
 		{
 			_tcplistener.Start ();
 			int i = 1;
+
 			while (true) 
 			{
 				_clinet = new XClinet();
