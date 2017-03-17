@@ -13,7 +13,7 @@ namespace RabbitX
 		{
 			string ipString ;
 			int port = 8888;
-			XPackage _package;
+			TPackage _package;
 			IFormatter _formater = new BinaryFormatter();
 			NetworkStream _networkstream;
 
@@ -34,11 +34,14 @@ namespace RabbitX
 
 			while (!Console.KeyAvailable)
 			{
-				_package = new XPackage()
+				_package = new TPackage()
 				{
-					From = "测试发送：" + rand.Next(),
-					To = "测试接收：" + rand.Next(),
-					Text = "测试数据：" + rand.Next(),
+					NickFrom = "发送:" + rand.Next(),
+					NickTo = "接收:" + rand.Next(),
+					Text = "数据:" + rand.Next(),
+					QQTo = rand.Next().ToString(),
+					QQFrom = rand.Next().ToString(),
+					DTime = DateTime.Now,
 					MagicId = 1
 				};
 				System.Threading.Thread.Sleep(500);
@@ -46,9 +49,9 @@ namespace RabbitX
 				try
 				{
 					_formater.Serialize(_networkstream, _package);
-					Toos.Msg_Message("发送数据{0}=>{1}:{2},{3}.{4} ...\n",
+					Toos.Msg_Message("{0}=>{1}#{2};{3};{4}\n",
 					                 Toos.GetLocalIP(),
-					                 ipString, _package.From, _package.To, _package.Text);
+					                 ipString, _package.NickFrom, _package.NickTo, _package.Text);
 				}
 				catch (Exception ex)
 				{
@@ -57,11 +60,12 @@ namespace RabbitX
 			}
 
 			//发送魔术包！
-			_package = new XPackage()
+			_package = new TPackage()
 			{
-				From = "准备" + rand.Next(),
-				To = "结束：" + rand.Next(),
-				Text = "通讯：" + rand.Next(),
+				NickFrom = "准备" + rand.Next(),
+				NickTo = "结束" + rand.Next(),
+				Text = "通讯" + rand.Next(),
+				DTime = DateTime.Now,
 				MagicId = 0
 			};
 
