@@ -9,7 +9,6 @@ namespace RabbitX
 {
 	class MainClass
 	{
-
 		public static void Main (string[] args)
 		{
 			string ipString ;
