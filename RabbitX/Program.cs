@@ -9,6 +9,7 @@ namespace RabbitX
 {
 	class MainClass
 	{
+
 		public static void Main (string[] args)
 		{
 			string ipString ;
@@ -19,18 +20,28 @@ namespace RabbitX
 
 			Random rand = new Random();
 
-			Toos.Msg_Message("请输远程服务器地址:");
-
-			ipString = Console.ReadLine ();
-			ipString = ipString == "" ? "127.0.0.1" : ipString;
+			IPAddress ipaddress=new IPAddress(0);
+			if (args.Length > 0 && IPAddress.TryParse(args[0], out ipaddress))
+			{
+				ipString = args[0];
+				Toos.Msg_Message("远程服务器地址:{0}",ipString);
+			}
+			else
+			{
+				Toos.Msg_Message("请输远程服务器地址:");
+				ipString = Console.ReadLine();
+			}
 
 			TcpClient clinet = new TcpClient();
 			clinet.Connect (new IPEndPoint (IPAddress.Parse (ipString), port));
+			Toos.Msg_Message("发送超时：{0:D}；接受超时{1:D}", clinet.SendTimeout, clinet.ReceiveTimeout);
 
 			_networkstream = clinet.GetStream();
 
-			Toos.Msg_Alert("正在连接{0}:{1} ...\n",ipString,port);
+			Toos.Msg_Error("正在连接{0}:{1} ...\n",ipString,port);
 			Toos.Msg_Message("程序运行中按任意键退出:D\n");
+
+		
 
 			while (!Console.KeyAvailable)
 			{
@@ -55,7 +66,7 @@ namespace RabbitX
 				}
 				catch (Exception ex)
 				{
-					Toos.Msg_Alert("错误:{0}\n",ex.Message);
+					Toos.Msg_Error("错误:{0}\n",ex.Message);
 				}
 			}
 

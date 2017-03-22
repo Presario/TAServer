@@ -50,12 +50,11 @@ namespace RabbitHome
 			}
 			catch (Exception ex)
 			{
-				Toos.Msg_Alert("错误:{0}\n", ex.StackTrace);
+				Toos.Msg_Error("错误:{0}\n", ex.StackTrace);
 			}
 			finally
 			{
-
-				Toos.Msg_Warn("线程{0:D5},远程{1} 结束\n",
+				Toos.Msg_Warn("线程{0:D5},远程{1} 结束 [OK] .\n",
 							  _clinet.ThreadId, _clinet.TcpClinet.Client.RemoteEndPoint.ToString());
 				_networkstream.Close();
 
@@ -63,7 +62,7 @@ namespace RabbitHome
 
 		}
 
-}
+	}
 
 }
 

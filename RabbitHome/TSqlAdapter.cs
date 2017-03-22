@@ -2,7 +2,6 @@
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
-using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 
@@ -135,7 +134,7 @@ namespace RabbitHome
 			}
 			try
 			{
-				if (_connection.State!= ConnectionState.Open)
+				if (_connection.State != ConnectionState.Open)
 				{
 					_connection.Open();
 				}
@@ -143,9 +142,14 @@ namespace RabbitHome
 				_command.ExecuteNonQuery();
 				_connection.Close();
 			}
-			catch (Exception ex)
+			catch (SqlException ex)
 			{
-				Toos.Msg_Alert("错误:{0}",ex.Message);
+				Toos.Msg_Error("错误:SQL数据库{0}\n",ex.Message);
+
+			}
+			catch (Exception exp)
+			{
+				Toos.Msg_Error("错误:{0}!\n", exp.ToString());
 			}
 
 		}

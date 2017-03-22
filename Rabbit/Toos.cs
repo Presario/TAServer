@@ -22,7 +22,7 @@ namespace Rabbit
 			Msg(">> " + format, ConsoleColor.Yellow, paramters);
 		}
 
-		public static void Msg_Alert(string format, params object[] paramters)
+		public static void Msg_Error(string format, params object[] paramters)
 		{
 			Msg(">> " + format, ConsoleColor.Red, paramters);
 		}
